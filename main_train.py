@@ -1,5 +1,5 @@
 import argparse
-from dataset.train import train
+from train.train import train
 
 
 def main(args):
@@ -8,6 +8,5 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--epochs", type=int, help="Number of training epochs", default=100)
     args = parser.parse_args()
     main(args)

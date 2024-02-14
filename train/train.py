@@ -119,11 +119,13 @@ def train(args):
                 # make the predictions and calculate the validation loss
                 pred = unet(x)
                 totalTestLoss += lossFunc(pred, y)
-                if e%5==4:
+
+                if e%config.PLOT_EVERY==0:
                     for i, predelem in enumerate(pred):
-                        save_image(predelem, "output/test_output/{}_{}_x.jpeg".format(i, e))
-                    for i, yelem in enumerate(y):
-                        save_image(yelem, "output/test_output/{}_{}_y.jpeg".format(i, e))
+                        save_image(torch.sigmoid(predelem), "output/test_output/{}_{}_x.jpeg".format(i, e))
+                    if e==config.NUM_EPOCHS-1:
+                        for i, yelem in enumerate(y):
+                            save_image(yelem, "output/test_output/{}_y.jpeg".format(i))
 
         # calculate the average training and validation loss
         avgTrainLoss = totalTrainLoss / trainSteps

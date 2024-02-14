@@ -7,6 +7,8 @@ import numpy as np
 import torch
 import cv2
 import os
+import argparse
+from train.train import train
 
 
 def load_model(model_name):
@@ -83,19 +85,25 @@ def make_predictions(model, imagePath):
         # prepare a plot for visualization
         prepare_plot(orig, gtMask, predMask)
 
+def main(args):
+    # load the image paths in our testing file and randomly select 10
+    # image paths
+    print("[INFO] loading up test image paths...")
+    imagePaths = open(config.TEST_PATHS).read().strip().split("\n")
+    imagePaths = np.random.choice(imagePaths, size=10)
 
-# load the image paths in our testing file and randomly select 10
-# image paths
-print("[INFO] loading up test image paths...")
-imagePaths = open(config.TEST_PATHS).read().strip().split("\n")
-imagePaths = np.random.choice(imagePaths, size=10)
-
-# load our model from disk and flash it to the current device
-print("[INFO] load up model...")
-model = load_model("pyimagesearch_simple")
+    # load our model from disk and flash it to the current device
+    print("[INFO] load up model...")
+    model = load_model("pyimagesearch_simple")
 
 
-# iterate over the randomly selected test image paths
-for path in imagePaths:
-    # make predictions and visualize the results
-    make_predictions(model, path)
+    # iterate over the randomly selected test image paths
+    for path in imagePaths:
+        # make predictions and visualize the results
+        make_predictions(model, path)
+    return
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    args = parser.parse_args()
+    main(args)
